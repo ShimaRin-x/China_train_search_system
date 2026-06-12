@@ -1,5 +1,7 @@
 # 中国铁路车次经路可视化平台
 
+当前版本：V1.0.1
+
 基于 Vue3 + TypeScript + Vite + MapLibre GL + Pinia + Element Plus，以及 FastAPI + PostgreSQL/PostGIS + SQLAlchemy + Redis 的中国铁路车次经路可视化平台。
 
 V1 聚焦五件事：
@@ -69,3 +71,21 @@ docker compose exec backend python -m app.cli.import_cr12306 --date 20260617 --d
 - cr-12306-train-info：用于车次、经停站、到发时刻、站序等客运运行信息。
 
 V1 的核心数据链路是：先导入站点和铁路线网，再导入车次经停站，最后通过空间匹配或人工校验结果生成 `train_route_segments`，供前端高亮显示。
+
+## 更新日志
+
+### V1.0.1 - 2026-06-12
+
+- 完成 V1 MVP 项目骨架：Vue3 前端、FastAPI 后端、PostgreSQL/PostGIS、Redis、Docker Compose。
+- 完成铁路地图前端基础体验：白底铁路地图、铁路类型配色、车站分级显示、搜索侧栏收放、地图图例。
+- 接入 `cr-12306-train-info` 本地数据导入，支持车次搜索、模糊搜索、经停站展示。
+- 增加 OSM/OpenRailwayMap 车站坐标导入与 12306 站名合并流程，目前已导入局部 OSM 车站坐标。
+- 完成 V1/V2 状态报告、API 设计、ER 图、Docker Compose 方案和开发计划文档。
+- 初始化 Git 仓库并连接 GitHub 远程仓库。
+
+## 版本维护约定
+
+- 每次提交前必须更新项目版本号。
+- 每次提交前必须在 README 的“更新日志”中记录本次变更内容。
+- 版本号采用 `V主版本.次版本.修订号` 格式，例如 `V1.0.1`。
+- 功能新增或验收范围扩大时提升次版本号；修复、文档、样式和数据导入改进时提升修订号。
