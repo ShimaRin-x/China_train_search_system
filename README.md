@@ -1,6 +1,6 @@
 # 中国铁路车次经路可视化平台
 
-当前版本：V1.0.2
+当前版本：V1.0.3
 
 基于 Vue3 + TypeScript + Vite + MapLibre GL + Pinia + Element Plus，以及 FastAPI + PostgreSQL/PostGIS + SQLAlchemy + Redis 的中国铁路车次经路可视化平台。
 
@@ -31,6 +31,30 @@ docker compose up --build
 - 前端：http://localhost:5173
 - 后端 OpenAPI：http://localhost:8000/docs
 - 健康检查：http://localhost:8000/api/v1/health
+
+## 局域网访问
+
+1. 查看运行 Docker 的主机局域网 IPv4 地址，例如 `192.168.110.214`。
+
+2. 在仓库根目录创建或修改 `.env`，把 `192.168.x.x` 替换成主机局域网 IP：
+
+```env
+VITE_API_BASE_URL=http://192.168.x.x:8000/api/v1
+BACKEND_CORS_ORIGINS=["http://localhost:5173","http://127.0.0.1:5173","http://192.168.x.x:5173"]
+```
+
+3. 重新创建前后端容器，让 Vite 和 FastAPI 读取新的环境变量：
+
+```bash
+docker compose up -d --build --force-recreate frontend backend
+```
+
+4. 同一局域网设备访问：
+
+- 前端：`http://192.168.x.x:5173`
+- 后端 OpenAPI：`http://192.168.x.x:8000/docs`
+
+如果无法访问，检查 Windows 防火墙是否允许 `5173` 和 `8000` 端口入站。
 
 ## 导入车次数据
 
@@ -73,6 +97,12 @@ docker compose exec backend python -m app.cli.import_cr12306 --date 20260617 --d
 V1 的核心数据链路是：先导入站点和铁路线网，再导入车次经停站，最后通过空间匹配或人工校验结果生成 `train_route_segments`，供前端高亮显示。
 
 ## 更新日志
+
+### V1.0.3 - 2026-06-14
+
+- 增加局域网访问配置说明。
+- 允许通过环境变量配置后端 CORS 来源。
+- 将 PostgreSQL 和 Redis 端口限制为仅本机访问，避免局域网暴露内部服务。
 
 ### V1.0.2 - 2026-06-12
 
